@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SANTA-B | Connexion</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="login-box">
+      <div class="logo">
+        <span class="logo-icon">🏥</span>
+        <h1>SANTA-B</h1>
+        <p class="subtitle">Assistant numérique de pré-consultation</p>
+      </div>
+
+      <form id="loginForm" class="login-form">
+        <div class="form-group">
+          <label for="nom">Nom</label>
+          <input type="text" id="nom" placeholder="Votre nom" required>
+        </div>
+
+        <div class="form-group">
+          <label for="role">Se connecter en tant que</label>
+          <select id="role" required>
+            <option value="">-- Choisir un rôle --</option>
+            <option value="stagiaire">Stagiaire (Accueil)</option>
+            <option value="medecin">Médecin</option>
+            <option value="admin">Administrateur</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-primary">Se connecter</button>
+      </form>
+
+      <p class="login-note">Ceci est une connexion simulée à des fins de démonstration du projet.</p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const nom = document.getElementById('nom').value.trim();
+      const role = document.getElementById('role').value;
+
+      if (!nom || !role) {
+        alert("Merci de remplir tous les champs.");
+        return;
+      }
+
+      const session = {
+        nom: nom,
+        role: role,
+        connecteLe: new Date().toISOString()
+      };
+      localStorage.setItem('santab_session', JSON.stringify(session));
+
+      if (role === 'medecin') {
+        window.location.href = 'dashboard_medecin.html';
+      } else if (role === 'stagiaire') {
+        window.location.href = 'ajouter_patient.html';
+      } else {
+        window.location.href = 'dashboard_admin.html';
+      }
+    });
+  </script>
+
+</body>
+</html>
