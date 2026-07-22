@@ -19,8 +19,8 @@
             <form id="formPatient">
                 <input type="text" id="nom" placeholder="Nom" required>
                 <input type="text" id="prenom" placeholder="Prénom" required>
-                <input type="number" id="age" placeholder="Âge" required>
-                <input type="number" id="poids" placeholder="Poids (kg)" required>
+                <input type="number" id="age" placeholder="Âge" required min="0" max="120">
+                <input type="number" id="poids" placeholder="Poids (kg)" required min="0" max="300">
                 <textarea id="antecedents" placeholder="Antécédents"></textarea>
                 <textarea id="allergies" placeholder="Allergies"></textarea>
                 <input type="date" id="dateEnregistrement" required>
