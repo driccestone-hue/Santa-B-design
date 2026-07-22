@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Patients</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <div class="page-container">
+        <div class="page-header">
+            <h2>Gestion des Patients</h2>
+        </div>
+
+        <!-- Formulaire d'ajout -->
+        <div class="card">
+            <form id="formPatient">
+                <input type="text" id="nom" placeholder="Nom" required>
+                <input type="text" id="prenom" placeholder="Prénom" required>
+                <input type="number" id="age" placeholder="Âge" required>
+                <input type="number" id="poids" placeholder="Poids (kg)" required>
+                <textarea id="antecedents" placeholder="Antécédents"></textarea>
+                <textarea id="allergies" placeholder="Allergies"></textarea>
+                <input type="date" id="dateEnregistrement" required>
+                <input type="text" id="enregistrePar" placeholder="Enregistré par" required>
+                <button type="submit" class="btn-primary">Ajouter Patient</button>
+            </form>
+        </div>
+
+        <!-- Barre de recherche -->
+        <input type="text" id="recherche" placeholder="Rechercher par nom ou prénom">
+
+        <!-- Liste des patients -->
+        <div id="listePatients"></div>
+    </div>
+
+    <script src="js/nav.js"></script>
+    <script src="js/patients.js"></script>
+</body>
+</html>
