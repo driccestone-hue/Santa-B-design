@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SANTA-B | Pré-diagnostic Médical</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="page-container">
+    <div class="card" style="padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div><h3 style="color: var(--primary-dark); margin: 0;">🏥 SANTA-B</h3></div>
+      <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+        <a href="dashboard_medecin.html" style="text-decoration: none; color: var(--text-dark);">Tableau de bord</a>
+        <a href="liste_patients.html" style="text-decoration: none; color: var(--text-dark);">Patients en attente</a>
+        <button onclick="deconnexion()" style="background: none; border: none; color: var(--danger); font-weight: 600; cursor: pointer; font-size: 0.95rem;">Déconnexion</button>
+      </div>
+    </div>
+
+    <div class="page-header">
+      <h2>Pré-diagnostic et Consultation</h2>
+      <p>Consultez la fiche transmise par l'accueil, confirmez la pathologie et prescrivez le traitement</p>
+    </div>
+
+    <div class="card" style="margin-bottom: 20px; border-left: 5px solid var(--primary);">
+      <h3 style="color: var(--primary-dark); margin-bottom: 12px;">📁 Fiche Clinique (Accueil)</h3>
+      <div id="infosPatient">
+        <p style="color: var(--text-light);">Chargement des informations du patient...</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <form id="formPrediagnostic">
+        <div class="form-group">
+          <label for="maladie">Pathologie suspectée / confirmée *</label>
+          <select id="maladie" required>
+            <option value="">-- Choisir une pathologie --</option>
+            <option value="Paludisme">Paludisme</option>
+            <option value="Dengue">Dengue</option>
+            <option value="Typhoïde">Typhoïde</option>
+            <option value="Diarrhée / Gastro-entérite">Diarrhée / Gastro-entérite</option>
+            <option value="Grippe / Infection respiratoire">Grippe / Infection respiratoire</option>
+            <option value="Maux de ventre">Maux de ventre</option>
+            <option value="autre">Autre (à préciser)</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="autreMaladieGroup" style="display:none;">
+          <label for="autreMaladie">Précisez la pathologie</label>
+          <input type="text" id="autreMaladie" placeholder="Nom de la pathologie diagnostiquée">
+        </div>
+
+        <div class="form-group">
+          <label for="avisMedecin">Avis médical et observations</label>
+          <textarea id="avisMedecin" placeholder="Remarques du médecin suite à l'examen..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="prescription">Prescription / Traitement *</label>
+          <textarea id="prescription" placeholder="Ex: Paracétamol, Artéméther... (transmis à la pharmacie)" required></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary">Valider et envoyer à la pharmacie</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script src="prediagnostic.js"></script>
+</body>
+</html>

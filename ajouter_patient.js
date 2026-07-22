@@ -1,75 +1,108 @@
-const STORAGE_KEY = 'santab_patients';
+document.addEventListener('DOMContentLoaded', function() {
+  verifierSession(['stagiaire', 'admin', 'medecin']);
+  afficherHistoriqueStagiaire();
+});
 
-// Charger les patients
-function getPatients() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-}
-
-function savePatients(patients) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(patients));
-}
-
-// Ajouter un patient
 document.getElementById('formPatient').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const patients = getPatients();
-    const newPatient = {
-        id: Date.now().toString(),
-        nom: document.getElementById('nom').value,
-        prenom: document.getElementById('prenom').value,
-        age: parseInt(document.getElementById('age').value),
-        poids: parseInt(document.getElementById('poids').value),
-        antecedents: document.getElementById('antecedents').value,
-        allergies: document.getElementById('allergies').value,
-        dateEnregistrement: document.getElementById('dateEnregistrement').value,
-        enregistrePar: document.getElementById('enregistrePar').value,
-        historiqueConsultations: []
-    };
-    patients.push(newPatient);
-    savePatients(patients);
-    afficherPatients();
-    this.reset();
+  e.preventDefault();
+
+  const nom = document.getElementById('nom').value.trim();
+  const prenom = document.getElementById('prenom').value.trim();
+  const age = parseFloat(document.getElementById('age').value);
+  const poids = parseFloat(document.getElementById('poids').value);
+  const temperature = parseFloat(document.getElementById('temperature').value);
+  const tension = document.getElementById('tension').value.trim();
+  const glycemieInput = document.getElementById('glycemie').value;
+  const glycemie = glycemieInput !== '' ? parseFloat(glycemieInput) : null;
+  const allergies = document.getElementById('allergies').value.trim();
+  const symptomes = document.getElementById('symptomes').value.trim();
+  const antecedents = document.getElementById('antecedents').value.trim();
+
+  if (isNaN(age) || age < 0 || age > 130) {
+    alert("Erreur : âge invalide (0 à 130 ans).");
+    return;
+  }
+  if (isNaN(poids) || poids < 0.05 || poids > 600) {
+    alert("Erreur : poids invalide (0.05 à 600 kg).");
+    return;
+  }
+  if (isNaN(temperature) || temperature < 15 || temperature > 47) {
+    alert("Erreur : température hors limites vitales mesurables (15 à 47 °C).");
+    return;
+  }
+  if (glycemie !== null && (isNaN(glycemie) || glycemie < 0 || glycemie > 15)) {
+    alert("Erreur : valeur de glycémie invalide (0 à 15 g/L).");
+    return;
+  }
+
+  let auteur = "Accueil";
+  const sessionData = localStorage.getItem('santab_session');
+  if (sessionData) {
+    try {
+      const session = JSON.parse(sessionData);
+      if (session && session.nom) auteur = session.nom;
+    } catch (err) {}
+  }
+
+  const maintenant = new Date();
+  const heureFormatee = maintenant.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  const dateFormatee = maintenant.toLocaleDateString('fr-FR');
+
+  const nouveauPatient = {
+    id: Date.now(),
+    nom: nom,
+    prenom: prenom,
+    age: age,
+    poidsValeur: poids,
+    poidsUnite: poids < 1 ? 'g' : 'kg',
+    temperatureValeur: temperature,
+    tension: tension,
+    glycemie: glycemie !== null ? glycemie + ' g/L' : 'Non renseigné',
+    allergies: allergies || 'Aucune',
+    symptomes: symptomes,
+    antecedents: antecedents || 'Aucun',
+    enregistrePar: auteur,
+    dateEnregistrement: maintenant.toISOString(),
+    heureAffichage: heureFormatee,
+    dateAffichage: dateFormatee,
+    statut: 'En attente',
+    historiqueConsultations: []
+  };
+
+  if (nouveauPatient.poidsUnite === 'g') {
+    nouveauPatient.poidsValeur = Math.round(poids * 1000);
+  }
+
+  const patients = getPatients();
+  patients.push(nouveauPatient);
+  savePatients(patients);
+
+  document.getElementById('formPatient').reset();
+  alert("✅ Patient enregistré et transmis au médecin !");
+  afficherHistoriqueStagiaire();
 });
 
-// Afficher les patients
-function afficherPatients(filtre = '') {
-    const patients = getPatients();
-    const liste = document.getElementById('listePatients');
-    liste.innerHTML = '';
-    const filtered = patients.filter(p => 
-        p.nom.toLowerCase().includes(filtre.toLowerCase()) ||
-        p.prenom.toLowerCase().includes(filtre.toLowerCase())
-    );
-    filtered.forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'card';
-        div.innerHTML = `
-            <h3>${p.prenom} ${p.nom}</h3>
-            <p>Âge : ${p.age} ans - Poids : ${p.poids} kg</p>
-            <p>Antécédents : ${p.antecedents || 'Aucun'}</p>
-            <p>Allergies : ${p.allergies || 'Aucune'}</p>
-            <p>Enregistré le : ${p.dateEnregistrement} par ${p.enregistrePar}</p>
-            <button onclick="voirHistorique('${p.id}')">Voir historique</button>
-        `;
-        liste.appendChild(div);
-    });
+function afficherHistoriqueStagiaire() {
+  const tbody = document.getElementById('historiqueStagiaireBody');
+  if (!tbody) return;
+
+  const patients = getPatients();
+
+  if (patients.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color: var(--text-light); padding:15px;">Aucun patient enregistré pour le moment.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = '';
+  patients.slice().reverse().forEach((p, i) => {
+    const numero = patients.length - i;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${numero}</td>
+      <td><strong>${p.nom} ${p.prenom}</strong></td>
+      <td>${p.heureAffichage || ''}</td>
+      <td><span class="badge ${p.statut === 'Traité' ? 'badge-leger' : 'badge-modere'}">${p.statut}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
-
-// Recherche
-document.getElementById('recherche').addEventListener('input', function() {
-    afficherPatients(this.value);
-});
-
-// Voir historique
-function voirHistorique(id) {
-    const patients = getPatients();
-    const patient = patients.find(p => p.id === id);
-    if (!patient) return;
-    alert('Historique des consultations :\n' + 
-          (patient.historiqueConsultations.length ? 
-           patient.historiqueConsultations.join('\n') : 
-           'Aucune consultation'));
-}
-
-// Initialisation
-afficherPatients();

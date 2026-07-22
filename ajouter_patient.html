@@ -1,42 +1,102 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion Patients</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SANTA-B | Accueil Patient</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div id="navbar-container"></div>
 
-    <div class="page-container">
-        <div class="page-header">
-            <h2>Gestion des Patients</h2>
-        </div>
-
-        <!-- Formulaire d'ajout -->
-        <div class="card">
-            <form id="formPatient">
-                <input type="text" id="nom" placeholder="Nom" required>
-                <input type="text" id="prenom" placeholder="Prénom" required>
-                <input type="number" id="age" placeholder="Âge" required min="0" max="120">
-                <input type="number" id="poids" placeholder="Poids (kg)" required min="0" max="300">
-                <textarea id="antecedents" placeholder="Antécédents"></textarea>
-                <textarea id="allergies" placeholder="Allergies"></textarea>
-                <input type="date" id="dateEnregistrement" required>
-                <input type="text" id="enregistrePar" placeholder="Enregistré par" required>
-                <button type="submit" class="btn-primary">Ajouter Patient</button>
-            </form>
-        </div>
-
-        <!-- Barre de recherche -->
-        <input type="text" id="recherche" placeholder="Rechercher par nom ou prénom">
-
-        <!-- Liste des patients -->
-        <div id="listePatients"></div>
+  <div class="page-container">
+    <div class="card" style="padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div><h3 style="color: var(--primary-dark); margin: 0;">🏥 SANTA-B</h3></div>
+      <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+        <a href="ajouter_patient.html" style="text-decoration: none; color: var(--primary); font-weight: 600;">Accueil Patient</a>
+        <button onclick="deconnexion()" style="background: none; border: none; color: var(--danger); font-weight: 600; cursor: pointer; font-size: 0.95rem;">Déconnexion</button>
+      </div>
     </div>
 
-    <script src="js/nav.js"></script>
-    <script src="ajouter_patient.js"></script>
+    <div class="page-header">
+      <h2>Enregistrement des Constantes Vitales (Accueil)</h2>
+      <p>Le stagiaire remplit les informations du patient avant transmission au médecin</p>
+    </div>
+
+    <div class="card">
+      <form id="formPatient">
+        <div class="form-group">
+          <label for="nom">Nom du patient *</label>
+          <input type="text" id="nom" placeholder="Ex: Ouédraogo" required>
+        </div>
+
+        <div class="form-group">
+          <label for="prenom">Prénom du patient *</label>
+          <input type="text" id="prenom" placeholder="Ex: Awa" required>
+        </div>
+
+        <div class="form-group">
+          <label for="age">Âge (ans) * <small>(0 à 130, 0 pour un nouveau-né)</small></label>
+          <input type="number" id="age" min="0" max="130" placeholder="Ex: 25" required>
+        </div>
+
+        <div class="form-group">
+          <label for="poids">Poids (kg) * <small>(0.05 à 600 — normes OMS, prématuré à adulte)</small></label>
+          <input type="number" step="0.001" id="poids" min="0.05" max="600" placeholder="Ex: 65 ou 0.6 pour 600 g" required>
+        </div>
+
+        <div class="form-group">
+          <label for="temperature">Température (°C) * <small>(15 à 47 — limites vitales mesurables)</small></label>
+          <input type="number" step="0.1" id="temperature" min="15" max="47" placeholder="Ex: 37.5" required>
+        </div>
+
+        <div class="form-group">
+          <label for="tension">Tension artérielle *</label>
+          <input type="text" id="tension" placeholder="Ex: 120/80" required>
+        </div>
+
+        <div class="form-group">
+          <label for="glycemie">Glycémie (g/L) <small>(optionnel)</small></label>
+          <input type="number" step="0.01" id="glycemie" min="0" max="15" placeholder="Ex: 1.0">
+        </div>
+
+        <div class="form-group">
+          <label for="allergies">Allergies connues <small>(optionnel)</small></label>
+          <textarea id="allergies" placeholder="Ex: Pénicilline, arachides... (laisser vide si aucune)"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="symptomes">Symptômes / motif de consultation *</label>
+          <textarea id="symptomes" placeholder="Décrivez ce que ressent le patient..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="antecedents">Antécédents médicaux <small>(optionnel)</small></label>
+          <textarea id="antecedents" placeholder="Ex: Hypertension, diabète, paludisme récent..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary">Enregistrer et transmettre au médecin</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3 style="color: var(--primary-dark); margin-bottom: 15px;">📋 Historique des enregistrements (session en cours)</h3>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>N°</th>
+              <th>Patient</th>
+              <th>Enregistré à</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
+          <tbody id="historiqueStagiaireBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script src="ajouter_patient.js"></script>
 </body>
 </html>

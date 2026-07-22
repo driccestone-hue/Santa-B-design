@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SANTA-B | Tableau de bord Médecin</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="page-container">
+    <div class="card" style="padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div><h3 style="color: var(--primary-dark); margin: 0;">🏥 SANTA-B</h3></div>
+      <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+        <a href="dashboard_medecin.html" style="text-decoration: none; color: var(--primary); font-weight: 600;">Tableau de bord</a>
+        <a href="liste_patients.html" style="text-decoration: none; color: var(--text-dark);">Patients en attente</a>
+        <button onclick="deconnexion()" style="background: none; border: none; color: var(--danger); font-weight: 600; cursor: pointer; font-size: 0.95rem;">Déconnexion</button>
+      </div>
+    </div>
+
+    <div class="page-header">
+      <h2>Tableau de bord Médecin</h2>
+      <p>Retrouvez ici les patients enregistrés à l'accueil en attente de consultation.</p>
+    </div>
+
+    <div class="card" style="text-align: center; padding: 40px;">
+      <h3 style="color: var(--primary-dark); margin-bottom: 10px;">🩺 Espace Médical</h3>
+      <p style="color: var(--text-light); margin-bottom: 25px;">Accédez à la liste des patients transmis par l'accueil pour lancer les consultations.</p>
+      <a href="liste_patients.html" class="btn-primary" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 25px;">Voir la liste d'attente</a>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script>verifierSession(['medecin', 'admin']);</script>
+</body>
+</html>

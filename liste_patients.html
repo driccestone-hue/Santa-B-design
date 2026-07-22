@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SANTA-B | Liste d'Attente</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="page-container">
+    <div class="card" style="padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div><h3 style="color: var(--primary-dark); margin: 0;">🏥 SANTA-B</h3></div>
+      <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+        <a href="dashboard_medecin.html" style="text-decoration: none; color: var(--text-dark);">Tableau de bord</a>
+        <a href="liste_patients.html" style="text-decoration: none; color: var(--primary); font-weight: 600;">Patients en attente</a>
+        <button onclick="deconnexion()" style="background: none; border: none; color: var(--danger); font-weight: 600; cursor: pointer; font-size: 0.95rem;">Déconnexion</button>
+      </div>
+    </div>
+
+    <div class="page-header">
+      <h2>Patients en Attente de Consultation</h2>
+      <p>Liste transmise par l'accueil, par ordre d'arrivée</p>
+    </div>
+
+    <div class="card" style="padding: 15px; margin-bottom: 20px;">
+      <input type="text" id="recherchePatient" placeholder="🔍 Rechercher un patient par nom ou prénom...">
+    </div>
+
+    <div class="card">
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>N°</th>
+              <th>Patient</th>
+              <th>Âge</th>
+              <th>Poids</th>
+              <th>Temp.</th>
+              <th>Tension</th>
+              <th>Statut</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="listePatientsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script src="liste_patients.js"></script>
+</body>
+</html>

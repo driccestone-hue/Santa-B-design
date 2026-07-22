@@ -42,20 +42,13 @@
   <script>
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
-
       const nom = document.getElementById('nom').value.trim();
       const role = document.getElementById('role').value;
-
       if (!nom || !role) {
         alert("Merci de remplir tous les champs.");
         return;
       }
-
-      const session = {
-        nom: nom,
-        role: role,
-        connecteLe: new Date().toISOString()
-      };
+      const session = { nom: nom, role: role, connecteLe: new Date().toISOString() };
       localStorage.setItem('santab_session', JSON.stringify(session));
 
       if (role === 'medecin') {
@@ -63,7 +56,7 @@
       } else if (role === 'stagiaire') {
         window.location.href = 'ajouter_patient.html';
       } else {
-        window.location.href = 'dashboard_admin.html';
+        window.location.href = 'liste_patients.html';
       }
     });
   </script>
