@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   verifierSession(['medecin', 'admin']);
   chargerPatientActif();
+  afficherListeMedicaments();
 
   document.getElementById('maladie').addEventListener('change', function() {
     const autreGroup = document.getElementById('autreMaladieGroup');
@@ -8,6 +9,46 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('autreMaladie').required = this.value === 'autre';
   });
 });
+
+/* Liste des médicaments disponibles (mêmes noms que dans pharmacie.js) */
+const MEDICAMENTS_DISPONIBLES = [
+  "Artéméther-Luméfantrine (Coartem)",
+  "Paracétamol",
+  "Sels de Réhydratation Orale (SRO)",
+  "Zinc (comprimés)",
+  "Ciprofloxacine",
+  "Amoxicilline",
+  "Metronidazole",
+  "Spasfon (Phloroglucinol)",
+  "Vitamine C",
+  "Sirop antitussif"
+];
+
+function afficherListeMedicaments() {
+  const container = document.getElementById('listeMedicamentsCheckbox');
+
+  const checkboxesMedicaments = MEDICAMENTS_DISPONIBLES.map((nom, i) => `
+    <label style="display:flex; align-items:center; gap:8px; font-weight:400; background: var(--bg); padding:8px 10px; border-radius:8px; border:1px solid var(--border);">
+      <input type="checkbox" value="${nom}" id="med${i}">
+      ${nom}
+    </label>
+  `).join('');
+
+  const checkboxAutre = `
+    <label style="display:flex; align-items:center; gap:8px; font-weight:400; background: var(--bg); padding:8px 10px; border-radius:8px; border:1px solid var(--border);">
+      <input type="checkbox" id="medAutre">
+      Autre (à préciser)
+    </label>
+  `;
+
+  container.innerHTML = checkboxesMedicaments + checkboxAutre;
+
+  document.getElementById('medAutre').addEventListener('change', function() {
+    const groupe = document.getElementById('autreMedicamentGroup');
+    groupe.style.display = this.checked ? 'block' : 'none';
+    if (!this.checked) document.getElementById('autreMedicament').value = '';
+  });
+}
 
 function chargerPatientActif() {
   const patientId = localStorage.getItem('santab_patient_actif_id');
@@ -60,7 +101,23 @@ document.getElementById('formPrediagnostic').addEventListener('submit', function
     : maladieSelect;
 
   const avisMedecin = document.getElementById('avisMedecin').value.trim();
-  const prescription = document.getElementById('prescription').value.trim();
+  const posologie = document.getElementById('posologie').value.trim();
+
+  const medicamentsCoches = MEDICAMENTS_DISPONIBLES.filter((nom, i) =>
+    document.getElementById('med' + i).checked
+  );
+
+  const autreCoche = document.getElementById('medAutre').checked;
+  const autreMedicamentTexte = document.getElementById('autreMedicament').value.trim();
+
+  if (autreCoche && autreMedicamentTexte) {
+    medicamentsCoches.push(autreMedicamentTexte);
+  }
+
+  if (medicamentsCoches.length === 0) {
+    alert("Veuillez cocher au moins un médicament à prescrire.");
+    return;
+  }
 
   if (!patients[patientIndex].historiqueConsultations) {
     patients[patientIndex].historiqueConsultations = [];
@@ -71,7 +128,9 @@ document.getElementById('formPrediagnostic').addEventListener('submit', function
     date: new Date().toISOString(),
     hypothese: maladieFinale,
     avisMedecin: avisMedecin,
-    prescription: prescription,
+    medicaments: medicamentsCoches,
+    posologie: posologie,
+    prescription: medicamentsCoches.join(', ') + (posologie ? ' — ' + posologie : ''),
     medecinConfirmation: 'Confirmé'
   });
 

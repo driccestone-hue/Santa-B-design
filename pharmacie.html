@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SANTA-B | Pharmacie</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .message-vide {
+      display: none;
+      color: var(--text-light);
+      margin-top: 14px;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    .tag-maladie {
+      display: inline-block;
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+      margin: 2px 3px 2px 0;
+    }
+    .garde-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .garde-card {
+      background-color: var(--white);
+      border-left: 4px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .garde-card h4 {
+      color: var(--primary-dark);
+      margin-bottom: 6px;
+      font-size: 1.05rem;
+    }
+    .garde-card p {
+      font-size: 0.9rem;
+      color: var(--text-dark);
+      margin: 2px 0;
+    }
+    .garde-card .telephone {
+      color: var(--primary);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-container">
+    <div class="card" style="padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div><h3 style="color: var(--primary-dark); margin: 0;">🏥 SANTA-B</h3></div>
+      <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+        <a href="dashboard_medecin.html" style="text-decoration: none; color: var(--text-dark);">Tableau de bord</a>
+        <a href="liste_patients.html" style="text-decoration: none; color: var(--text-dark);">Patients en attente</a>
+        <a href="pharmacie.html" style="text-decoration: none; color: var(--primary); font-weight: 600;">Pharmacie</a>
+        <button onclick="deconnexion()" style="background: none; border: none; color: var(--danger); font-weight: 600; cursor: pointer; font-size: 0.95rem;">Déconnexion</button>
+      </div>
+    </div>
+
+    <div class="page-header">
+      <h2>💊 Pharmacie — Médicaments</h2>
+      <p>Sélectionnez un médicament pour connaître son utilité et ses précautions d'usage.</p>
+    </div>
+
+    <div class="card">
+      <div class="form-group">
+        <label for="recherche">Sélectionner un médicament</label>
+        <select id="recherche">
+          <option value="">-- Tous les médicaments --</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Utilité</th>
+              <th>Maladies associées</th>
+              <th>Précautions</th>
+            </tr>
+          </thead>
+          <tbody id="corps-tableau"></tbody>
+        </table>
+      </div>
+      <p id="aucun-resultat" class="message-vide">Aucun médicament ne correspond à votre recherche.</p>
+    </div>
+
+    <div class="page-header">
+      <h2>📍 Répertoire des pharmacies</h2>
+      <p>Sélectionnez votre ville pour afficher une sélection d'officines de référence.</p>
+    </div>
+
+    <div class="card">
+      <div class="form-group">
+        <label for="choix-ville">Sélectionnez une ville</label>
+        <select id="choix-ville">
+          <option value="ouagadougou">Ouagadougou</option>
+          <option value="bobo">Bobo-Dioulasso</option>
+          <option value="koudougou">Koudougou</option>
+          <option value="ouahigouya">Ouahigouya</option>
+          <option value="banfora">Banfora</option>
+          <option value="dedougou">Dédougou</option>
+          <option value="kaya">Kaya</option>
+          <option value="fada">Fada N'Gourma</option>
+          <option value="tenkodogo">Tenkodogo</option>
+          <option value="ziniare">Ziniaré</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="liste-pharmacies-container"></div>
+
+  </div>
+
+  <script src="js/script.js"></script>
+  <script src="pharmacie.js"></script>
+</body>
+</html>
